@@ -1,6 +1,7 @@
 package com.rogoman.easyauth;
 
 import java.nio.ByteBuffer;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
@@ -50,8 +51,10 @@ public abstract class Authenticator {
      *
      * @param secret secret used for generating the code
      * @return generated code
+     * @exception java.security.InvalidKeyException if the secret passed has an invalid format
+     * @exception com.rogoman.easyauth.AuthenticatorException if there is another problem in computing the code value
      */
-    public abstract String getCode(final String secret);
+    public abstract String getCode(final String secret) throws AuthenticatorException, InvalidKeyException;
 
     /**
      * Checks if the provided code is valid for given secret key and user identifier.
@@ -69,8 +72,10 @@ public abstract class Authenticator {
      * @param secret         passed secret key
      * @param challengeValue passed challenge value
      * @return generated code
+     * @exception java.security.InvalidKeyException if the secret passed has an invalid format
+     * @exception com.rogoman.easyauth.AuthenticatorException if there is another problem in computing the code value
      */
-    protected String getCodeInternal(final String secret, final long challengeValue) {
+    protected String getCodeInternal(final String secret, final long challengeValue) throws InvalidKeyException, AuthenticatorException {
         long chlg = challengeValue;
 
         byte[] challenge = ByteBuffer.allocate(8).putLong(challengeValue).array();
@@ -80,7 +85,12 @@ public abstract class Authenticator {
             key[i] = 0;
         }
 
-        byte[] hash = HMAC.hmacDigest(challenge, key, CRYPTO_ALGORITHM);
+        byte[] hash;
+        try {
+            hash = HMAC.hmacDigest(challenge, key, CRYPTO_ALGORITHM);
+        } catch (final NoSuchAlgorithmException e) {
+            throw new AuthenticatorException("HmacSHA1 algorithm is not present in your JVM.", e);
+        }
 
         int offset = hash[hash.length - 1] & 0xf;
 
@@ -99,13 +109,13 @@ public abstract class Authenticator {
     }
 
     /**
-     * Compares two strings in linear time.
+     * Compares two strings.
      *
      * @param a first string to compare
      * @param b second string to compare
      * @return comparison result
      */
-    protected boolean linearTimeEquals(final String a, final String b) {
+    protected boolean stringEquals(final String a, final String b) {
         int diff = a.length() ^ b.length();
 
         for (int i = 0; i < a.length() && i < b.length(); i++) {

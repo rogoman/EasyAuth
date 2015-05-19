@@ -11,7 +11,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  * A wrapper class for calling the HMAC providers.
  */
-public final class HMAC {
+final class HMAC {
 
     /**
      * Private constructor to prevent from instantiating the class.
@@ -26,8 +26,12 @@ public final class HMAC {
      * @param keyString Key to be used in the hashing process
      * @param algorithm HMAC algorithm to be used
      * @return HMAC digest
+     * @exception java.io.UnsupportedEncodingException if UTF-8 or ASCII encoding is not available
+     * @exception java.security.NoSuchAlgorithmException thrown when the passed digest algorithm name cannot be recognized
+     * @exception java.security.InvalidKeyException thrown when the passed secret key value is invalid according to the digest algorithm
      */
-    public static String hmacDigest(final String msg, final String keyString, final String algorithm) {
+    static String hmacDigest(final String msg, final String keyString, final String algorithm)
+            throws UnsupportedEncodingException, InvalidKeyException, NoSuchAlgorithmException {
         if (msg == null) {
             throw new IllegalArgumentException("msg is empty");
         }
@@ -39,15 +43,11 @@ public final class HMAC {
         }
 
         String digest = null;
-        try {
-            byte[] keyAsBytes = (keyString).getBytes("UTF-8");
-            byte[] msgAsBytes = msg.getBytes("ASCII");
+        byte[] keyAsBytes = (keyString).getBytes("UTF-8");
+        byte[] msgAsBytes = msg.getBytes("ASCII");
 
-            byte[] byteResult = hmacDigest(msgAsBytes, keyAsBytes, algorithm);
-            digest = convertToHexString(byteResult);
-        } catch (final UnsupportedEncodingException e) {
-            return null; // UPDATE!
-        }
+        byte[] byteResult = hmacDigest(msgAsBytes, keyAsBytes, algorithm);
+        digest = convertToHexString(byteResult);
         return digest;
     }
 
@@ -58,8 +58,10 @@ public final class HMAC {
      * @param secretKey Key to be used in the hashing process
      * @param algorithm HMAC algorithm to be used
      * @return HMAC digest
+     * @exception java.security.NoSuchAlgorithmException thrown when the passed digest algorithm name cannot be recognized
+     * @exception java.security.InvalidKeyException thrown when the passed secret key value is invalid according to the digest algorithm
      */
-    public static byte[] hmacDigest(final byte[] msg, final byte[] secretKey, final String algorithm) {
+    static byte[] hmacDigest(final byte[] msg, final byte[] secretKey, final String algorithm) throws NoSuchAlgorithmException, InvalidKeyException {
         if (msg == null) {
             throw new IllegalArgumentException("msg is empty");
         }
@@ -70,19 +72,10 @@ public final class HMAC {
             throw new IllegalArgumentException("algo is empty");
         }
 
-        byte[] result = null;
-        try {
-            SecretKeySpec key = new SecretKeySpec(secretKey, algorithm);
-            Mac mac = Mac.getInstance(algorithm);
-            mac.init(key);
-            result = mac.doFinal(msg);
-
-        } catch (final InvalidKeyException e) {
-            return null; // UPDATE!
-        } catch (final NoSuchAlgorithmException e) {
-            return null; // UPDATE!
-        }
-        return result;
+        SecretKeySpec key = new SecretKeySpec(secretKey, algorithm);
+        Mac mac = Mac.getInstance(algorithm);
+        mac.init(key);
+        return mac.doFinal(msg);
     }
 
     /**
@@ -91,7 +84,7 @@ public final class HMAC {
      * @param byteArray byte array
      * @return hex string
      */
-    public static String convertToHexString(final byte[] byteArray) {
+    static String convertToHexString(final byte[] byteArray) {
         if (byteArray == null) {
             throw new IllegalArgumentException("byteArray is null");
         }

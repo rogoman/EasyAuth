@@ -2,6 +2,7 @@ package com.rogoman.easyauth;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.security.InvalidKeyException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -45,9 +46,11 @@ public class TimeAuthenticator extends Authenticator {
      *
      * @param secret secret used for generating the code
      * @return generated code
+     * @exception java.security.InvalidKeyException if the secret passed has an invalid format
+     * @exception com.rogoman.easyauth.AuthenticatorException if there is another problem in computing the code value
      */
     @Override
-    public String getCode(final String secret) {
+    public String getCode(final String secret) throws AuthenticatorException, InvalidKeyException {
         if (StringUtils.isEmpty(secret)) {
             throw new IllegalArgumentException("secret cannot be null");
         }
@@ -61,8 +64,10 @@ public class TimeAuthenticator extends Authenticator {
      * @param secret                    secret used for generating the code
      * @param currentEpochTimeInSeconds current Epoch time in seconds
      * @return generated code
+     * @exception java.security.InvalidKeyException if the secret passed has an invalid format
+     * @exception com.rogoman.easyauth.AuthenticatorException if there is another problem in computing the code value
      */
-    public String getCode(final String secret, final long currentEpochTimeInSeconds) {
+    public String getCode(final String secret, final long currentEpochTimeInSeconds) throws AuthenticatorException, InvalidKeyException {
         if (StringUtils.isEmpty(secret)) {
             throw new IllegalArgumentException("secret cannot be null");
         }
@@ -99,11 +104,15 @@ public class TimeAuthenticator extends Authenticator {
             long currentEpochTime = calendar.getTimeInMillis() / MILLIS_IN_SECOND;
             long currentInterval = getInterval(currentEpochTime);
 
-            if (linearTimeEquals(getCode(secret, currentEpochTime), code)
-                    && !usedCodeManager.isCodeUsed(currentInterval, code, userIdentifier)) {
-                codeMatch = true;
-                usedCodeManager.addCode(currentInterval, code, userIdentifier);
-                break;
+            try {
+                if (stringEquals(getCode(secret, currentEpochTime), code)
+                        && !usedCodeManager.isCodeUsed(currentInterval, code, userIdentifier)) {
+                    codeMatch = true;
+                    usedCodeManager.addCode(currentInterval, code, userIdentifier);
+                    break;
+                }
+            } catch (final AuthenticatorException | InvalidKeyException e) {
+                return false;
             }
         }
         return codeMatch;

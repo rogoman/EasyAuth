@@ -5,7 +5,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Represents BASE32 encoding used by the Google Authenticator algorithm.
  */
-public final class Base32Encoding {
+final class Base32Encoding {
 
     /**
      * A private constructor to prevent from instantiating this class.
@@ -19,7 +19,7 @@ public final class Base32Encoding {
      * @param input BASE32 string input
      * @return byte array
      */
-    public static byte[] toBytes(final String input) {
+    static byte[] toBytes(final String input) {
         if (StringUtils.isEmpty(input)) {
             throw new IllegalArgumentException("input");
         }
@@ -61,7 +61,7 @@ public final class Base32Encoding {
      * @param input byte array
      * @return BASE32 string
      */
-    public static String toString(final byte[] input) {
+    static String toString(final byte[] input) {
         if (input == null || input.length == 0) {
             throw new IllegalArgumentException("input");
         }
