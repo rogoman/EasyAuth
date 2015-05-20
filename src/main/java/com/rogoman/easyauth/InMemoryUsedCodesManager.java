@@ -15,6 +15,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * A manager of used codes that keeps the used ones in memory.
+ * The used codes are kept for a configurable time.
  */
 public class InMemoryUsedCodesManager implements UsedCodesManager<String> {
     private static class UsedCode {

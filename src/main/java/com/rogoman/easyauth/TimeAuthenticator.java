@@ -16,6 +16,11 @@ public class TimeAuthenticator extends Authenticator {
      */
     public static final int MILLIS_IN_SECOND = 1000;
 
+    /**
+     * Default interval length in seconds. This is the default value for Google Authenticator.
+     */
+    public static final int DEFAULT_INTERVAL_IN_SECONDS = 30;
+
     private static final int CHECK_BACK_INTERVALS = 5;
 
     private static final int CHECK_FORWARD_INTERVALS = 5;
@@ -25,6 +30,7 @@ public class TimeAuthenticator extends Authenticator {
 
     /**
      * Creates a new instance of the TimeAuthenticator class.
+     * You can pass your own used-codes manager and define a custom interval length.
      *
      * @param usedCodesManager used codes manager
      * @param intervalSeconds  token generating interval in seconds
@@ -39,6 +45,23 @@ public class TimeAuthenticator extends Authenticator {
 
         this.usedCodeManager = usedCodesManager;
         this.intervalSeconds = intervalSeconds;
+    }
+
+    /**
+     * Creates a new instance of the TimeAuthenticator class.
+     * The created authenticator uses a passed uses-codes manager and a default interval length compatible with Google Authenticator.
+     * @param usedCodesManager used codes manager
+     */
+    public TimeAuthenticator(final UsedCodesManager<String> usedCodesManager) {
+        this(usedCodesManager, DEFAULT_INTERVAL_IN_SECONDS);
+    }
+
+    /**
+     * Creates a new instance of the TimeAuthenticator class.
+     * The created authenticator uses a SimpleUsedCodesManager and a default interval length compatible with Google Authenticator.
+     */
+    public TimeAuthenticator() {
+        this(new SimpleUsedCodesManager(), DEFAULT_INTERVAL_IN_SECONDS);
     }
 
     /**
