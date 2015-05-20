@@ -18,15 +18,15 @@ This library requires at least Java 7. To add this library to your code, you can
     
     * Maven
             
-        <dependency>
-            <groupId>com.rogoman</groupId>
-            <artifactId>easyauth</artifactId>
-            <version>0.1.0</version>
-        </dependency>
+            <dependency>
+                <groupId>com.rogoman</groupId>
+                <artifactId>easyauth</artifactId>
+                <version>0.1.0</version>
+            </dependency>
             
     * Gradle
         
-        compile 'com.rogoman:easyauth:0.1.0'
+            compile 'com.rogoman:easyauth:0.1.0'
 
 Usage
 -----
@@ -64,5 +64,9 @@ You can compile javadoc pages by calling
     mvn clean package -P javadoc
     
 The javadoc HTML pages will be produced in the `target/apidocs` subfolder.
+
+Contributing
+------------
+I love pull requests! If you feel that you can add value to the library by implementing new features or fixing bugs, please do so! 
 
 [RFC]: https://tools.ietf.org/html/rfc6238
