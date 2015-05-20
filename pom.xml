@@ -8,7 +8,7 @@
     <artifactId>easyauth</artifactId>
     <name>EasyAuth</name>
     <description>A lightweight Google Authenticator OTP implementation for any use.</description>
-    <version>0.1</version>
+    <version>0.1.0</version>
 
     <scm>
         <url>https://github.com/rogoman/EasyAuth</url>
