@@ -1,3 +1,19 @@
+/*
+ * Copyright 2015 Tomasz Rogozik
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.rogoman.easyauth;
 
 import javax.crypto.Mac;
@@ -26,9 +42,9 @@ final class HMAC {
      * @param keyString Key to be used in the hashing process
      * @param algorithm HMAC algorithm to be used
      * @return HMAC digest
-     * @exception java.io.UnsupportedEncodingException if UTF-8 or ASCII encoding is not available
-     * @exception java.security.NoSuchAlgorithmException thrown when the passed digest algorithm name cannot be recognized
-     * @exception java.security.InvalidKeyException thrown when the passed secret key value is invalid according to the digest algorithm
+     * @throws java.io.UnsupportedEncodingException   if UTF-8 or ASCII encoding is not available
+     * @throws java.security.NoSuchAlgorithmException thrown when the passed digest algorithm name cannot be recognized
+     * @throws java.security.InvalidKeyException      thrown when the passed secret key value is invalid according to the digest algorithm
      */
     static String hmacDigest(final String msg, final String keyString, final String algorithm)
             throws UnsupportedEncodingException, InvalidKeyException, NoSuchAlgorithmException {
@@ -58,8 +74,8 @@ final class HMAC {
      * @param secretKey Key to be used in the hashing process
      * @param algorithm HMAC algorithm to be used
      * @return HMAC digest
-     * @exception java.security.NoSuchAlgorithmException thrown when the passed digest algorithm name cannot be recognized
-     * @exception java.security.InvalidKeyException thrown when the passed secret key value is invalid according to the digest algorithm
+     * @throws java.security.NoSuchAlgorithmException thrown when the passed digest algorithm name cannot be recognized
+     * @throws java.security.InvalidKeyException      thrown when the passed secret key value is invalid according to the digest algorithm
      */
     static byte[] hmacDigest(final byte[] msg, final byte[] secretKey, final String algorithm) throws NoSuchAlgorithmException, InvalidKeyException {
         if (msg == null) {
