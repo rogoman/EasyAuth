@@ -24,8 +24,18 @@
     <artifactId>easyauth</artifactId>
     <name>EasyAuth</name>
     <description>A lightweight Google Authenticator OTP implementation for any use.</description>
+    <url>https://github.com/rogoman/EasyAuth</url>
     <version>0.1.0</version>
     <packaging>jar</packaging>
+
+    <developers>
+        <developer>
+            <name>Tomasz Rogozik</name>
+            <email>tomasz.rogozik@gmail.com</email>
+            <organization>Tomasz Rogozik</organization>
+            <organizationUrl>http://www.rogoman.com</organizationUrl>
+        </developer>
+    </developers>
 
     <scm>
         <connection>scm:git:git@github.com:rogoman/EasyAuth.git</connection>
